@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF to Images</title>
+    <style>
+        /* General body styling */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Page title */
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        /* Link to gallery */
+        a {
+            text-decoration: none;
+            color: #007BFF;
+            margin-bottom: 20px;
+            display: inline-block;
+            font-size: 16px;
+        }
+
+        a:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
+        /* Form styling */
+        form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 300px;
+        }
+
+        /* File input styling */
+        input[type="file"] {
+            margin-bottom: 20px;
+            font-size: 14px;
+        }
+
+        /* Submit button styling */
+        button {
+            background-color: #007BFF;
+            color: #ffffff;
+            border: none;
+            padding: 10px 15px;
+            font-size: 14px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload PDF to Convert Pages to Images</h1>
+    <a href="/gallery">View Image Gallery</a>
+
+    <form action="/upload" method="POST" enctype="multipart/form-data">
+        <input type="file" name="pdf" accept="application/pdf" required />
+        <button type="submit">Upload & Convert</button>
+    </form>
+</body>
+</html>
