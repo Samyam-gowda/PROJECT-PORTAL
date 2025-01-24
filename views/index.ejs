@@ -5,37 +5,56 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PDF to Images</title>
     <style>
-        /* General body styling */
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body styling */
         body {
             font-family: Arial, sans-serif;
             background-color: #f0f4f8;
-            margin: 0;
-            padding: 0;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             min-height: 100vh;
         }
 
-        /* Page title */
-        h1 {
+        /* Navigation Bar */
+        .navbar {
+            width: 100%;
+            background-color: #007BFF;
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar img {
+            height: 50px;
+        }
+
+        .navbar h1 {
+            color: white;
+            font-size: 20px;
+            margin-left: 10px;
+        }
+
+        /* Main content */
+        .container {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h2 {
             color: #333;
             margin-bottom: 20px;
-        }
-
-        /* Link to gallery */
-        a {
-            text-decoration: none;
-            color: #007BFF;
-            margin-bottom: 20px;
-            display: inline-block;
-            font-size: 16px;
-        }
-
-        a:hover {
-            color: #0056b3;
-            text-decoration: underline;
         }
 
         /* Form styling */
@@ -47,53 +66,93 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 300px;
+            width: 350px;
         }
 
-        /* File input styling */
-        input[type="file"] {
-            margin-bottom: 20px;
+        label {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        select, input[type="file"], button {
+            width: 100%;
+            margin-bottom: 15px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
             font-size: 14px;
         }
 
-        /* Submit button styling */
+        select {
+            background-color: #f9f9f9;
+            cursor: pointer;
+        }
+
         button {
             background-color: #007BFF;
             color: #ffffff;
-            border: none;
-            padding: 10px 15px;
-            font-size: 14px;
-            border-radius: 5px;
+            font-size: 16px;
+            font-weight: bold;
             cursor: pointer;
-            width: 100%;
+            border: none;
+            transition: 0.3s;
         }
 
         button:hover {
             background-color: #0056b3;
         }
+
+        /* Link to gallery */
+        .gallery-link {
+            margin-top: 20px;
+            text-decoration: none;
+            color: #007BFF;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .gallery-link:hover {
+            color: #0056b3;
+            text-decoration: underline;
+        }
+
     </style>
 </head>
 <body>
-    <h1>Upload PDF to Convert Pages to Images</h1>
-    <a href="/gallery">View Image Gallery</a>
 
-    <form action="/upload" method="POST" enctype="multipart/form-data">
-        <label for="faculty">Select Faculty:</label>
-        <select name="faculty" id="faculty" required>
-            <option value="Faculty of Engineering and Technology">Faculty of Engineering and Technology</option>
-            <option value="Faculty of Management and Commerce">Faculty of Management and Commerce</option>
-            <option value="School of Law">School of Law</option>
-            <option value="Faculty of Life and Allied Health Sciences">Faculty of Life and Allied Health Sciences</option>
-            <option value="Ramaiah Medical College">Ramaiah Medical College</option>
-            <option value="Faculty of Dental Sciences">Faculty of Dental Sciences</option>
-            <option value="Faculty of Pharmacy">Faculty of Pharmacy</option>
-            <option value="Faculty of Hospitality Management and Catering Technology">Faculty of Hospitality Management and Catering Technology</option>
-            <option value="MS Ramaiah Institute of Nursing Education and Research">MS Ramaiah Institute of Nursing Education and Research</option>
-        </select>
-    
-        <input type="file" name="pdf" accept="application/pdf" required />
-        <button type="submit">Upload & Convert</button>
-    </form>
-    
+    <!-- Navbar -->
+    <div class="navbar">
+        <img src="/images/logo.webp" alt="College Logo">
+        <h1>College Project Repository</h1>
+    </div>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h2>Upload PDF to Convert Pages to Images</h2>
+        
+        <form action="/upload" method="POST" enctype="multipart/form-data">
+            <label for="faculty">Select Faculty:</label>
+            <select name="faculty" id="faculty" required>
+                <option value="Faculty of Engineering and Technology">Faculty of Engineering and Technology</option>
+                <option value="Faculty of Management and Commerce">Faculty of Management and Commerce</option>
+                <option value="School of Law">School of Law</option>
+                <option value="Faculty of Life and Allied Health Sciences">Faculty of Life and Allied Health Sciences</option>
+                <option value="Ramaiah Medical College">Ramaiah Medical College</option>
+                <option value="Faculty of Dental Sciences">Faculty of Dental Sciences</option>
+                <option value="Faculty of Pharmacy">Faculty of Pharmacy</option>
+                <option value="Faculty of Hospitality Management and Catering Technology">Faculty of Hospitality Management and Catering Technology</option>
+                <option value="MS Ramaiah Institute of Nursing Education and Research">MS Ramaiah Institute of Nursing Education and Research</option>
+            </select>
+
+            <label for="pdf">Upload PDF:</label>
+            <input type="file" name="pdf" accept="application/pdf" required />
+
+            <button type="submit">Upload & Convert</button>
+        </form>
+
+        <a href="/gallery" class="gallery-link">View Image Gallery</a>
+    </div>
+
 </body>
 </html>
