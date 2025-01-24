@@ -78,8 +78,22 @@
     <a href="/gallery">View Image Gallery</a>
 
     <form action="/upload" method="POST" enctype="multipart/form-data">
+        <label for="faculty">Select Faculty:</label>
+        <select name="faculty" id="faculty" required>
+            <option value="Faculty of Engineering and Technology">Faculty of Engineering and Technology</option>
+            <option value="Faculty of Management and Commerce">Faculty of Management and Commerce</option>
+            <option value="School of Law">School of Law</option>
+            <option value="Faculty of Life and Allied Health Sciences">Faculty of Life and Allied Health Sciences</option>
+            <option value="Ramaiah Medical College">Ramaiah Medical College</option>
+            <option value="Faculty of Dental Sciences">Faculty of Dental Sciences</option>
+            <option value="Faculty of Pharmacy">Faculty of Pharmacy</option>
+            <option value="Faculty of Hospitality Management and Catering Technology">Faculty of Hospitality Management and Catering Technology</option>
+            <option value="MS Ramaiah Institute of Nursing Education and Research">MS Ramaiah Institute of Nursing Education and Research</option>
+        </select>
+    
         <input type="file" name="pdf" accept="application/pdf" required />
         <button type="submit">Upload & Convert</button>
     </form>
+    
 </body>
 </html>

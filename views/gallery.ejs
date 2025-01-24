@@ -70,15 +70,19 @@
 </head>
 <body>
 
-<h1>PDF Image Gallery</h1>
+    <h1>PDF Image Gallery</h1>
 
-<ul>
-    <% galleryData.forEach(folder => { %>
-        <li>
-            <a href="/gallery/<%= folder.folderName %>"><%= folder.folderName %></a>
-        </li>
-    <% }) %>
-</ul>
+    <% for (const faculty in galleryData) { %>
+        <h2><%= faculty %></h2>
+        <ul>
+            <% galleryData[faculty].forEach(folder => { %>
+                <li>
+                    <a href="/gallery/<%= faculty %>/<%= folder.folderName %>"><%= folder.folderName %></a>
+                </li>
+            <% }) %>
+        </ul>
+    <% } %>
+    
 
 </body>
 </html>

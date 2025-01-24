@@ -25,127 +25,80 @@ router.get("/", (req, res) => {
 
 // Route to handle PDF upload and conversion
 router.post("/upload", upload.single("pdf"), async (req, res) => {
-    const pdfPath = req.file.path; // Path of the uploaded PDF
-    const pdfName = path.basename(req.file.originalname, path.extname(req.file.originalname)); // Extract name without extension
-    const outputDir = path.join(__dirname, "../public/images", pdfName);
+    const faculty = req.body.faculty; // Get faculty from form
+    const pdfPath = req.file.path; 
+    const pdfName = path.basename(req.file.originalname, path.extname(req.file.originalname));
 
+    const outputDir = path.join(__dirname, "../public/images", faculty, pdfName);
 
     try {
-        // Ensure the output directory exists
         if (!fs.existsSync(outputDir)) {
-            fs.mkdirSync(outputDir, { recursive: true }); // Create directory with the PDF name
+            fs.mkdirSync(outputDir, { recursive: true });
         }
 
-        // Set options for pdf-poppler
         const options = {
-            format: "jpeg", // Output image format
-            out_dir: outputDir, // Store images in the dynamically created folder
-            out_prefix: pdfName, // Prefix images with PDF name
-            page: null, // Convert all pages
+            format: "jpeg",
+            out_dir: outputDir,
+            out_prefix: pdfName,
+            page: null,
         };
 
-        // Convert PDF to images
         await pdfPoppler.convert(pdfPath, options);
-
-        res.send(`PDF pages have been converted to images and stored in the folder: ${outputDir}`);
+        res.send(`PDF pages converted to images and stored in: ${outputDir}`);
     } catch (error) {
-        console.error("Error during PDF to image conversion:", error);
-        res.status(500).send("An error occurred during conversion: " + error.message);
+        console.error("Error during conversion:", error);
+        res.status(500).send("An error occurred: " + error.message);
     } finally {
-        // Cleanup: Delete uploaded PDF
         fs.unlinkSync(pdfPath);
     }
 });
+
 // const fs = require('fs');
 // const path = require('path');
 
 router.get("/gallery", (req, res) => {
     const imagesDir = path.join(__dirname, "../public/images");
-    
-    // Get all folders (PDF names)
-    fs.readdir(imagesDir, (err, folders) => {
+
+    fs.readdir(imagesDir, (err, faculties) => {
         if (err) {
             return res.status(500).send("Error reading images directory.");
         }
 
-        // Filter only directories
-        const imageFolders = folders.filter(folder => {
-            return fs.statSync(path.join(imagesDir, folder)).isDirectory();
+        let galleryData = {};
+
+        faculties.forEach(faculty => {
+            const facultyPath = path.join(imagesDir, faculty);
+            if (fs.statSync(facultyPath).isDirectory()) {
+                const pdfFolders = fs.readdirSync(facultyPath).filter(folder =>
+                    fs.statSync(path.join(facultyPath, folder)).isDirectory()
+                );
+
+                galleryData[faculty] = pdfFolders.map(folder => ({
+                    folderName: folder,
+                    images: fs.readdirSync(path.join(facultyPath, folder)).filter(file => file.endsWith('.jpg'))
+                }));
+            }
         });
 
-        // Prepare data to send to the frontend
-        const galleryData = imageFolders.map(folder => {
-            const folderPath = path.join(imagesDir, folder);
-            const images = fs.readdirSync(folderPath).filter(file => file.endsWith('.jpg'));
-            return {
-                folderName: folder,
-                images: images.map(image => `/images/${folder}/${image}`)
-            };
-        });
-
-        // Render the gallery page with the data
         res.render("gallery", { galleryData });
     });
 });
 
+
 // Export the router
 module.exports = router;
 // Route to display images for a specific PDF folder
-router.get("/gallery/:folderName", (req, res) => {
-    const folderName = req.params.folderName;
-    const folderPath = path.join(__dirname, "../public/images", folderName);
+router.get("/gallery/:faculty/:folderName", (req, res) => {
+    const { faculty, folderName } = req.params;
+    const folderPath = path.join(__dirname, "../public/images", faculty, folderName);
 
-    // Check if the folder exists
     if (!fs.existsSync(folderPath)) {
         return res.status(404).send("Folder not found.");
     }
 
-    // Get all images in the folder
     const images = fs.readdirSync(folderPath).filter(file => file.endsWith('.jpg'));
+    const imagePaths = images.map(image => `/images/${faculty}/${folderName}/${image}`);
 
-    // Prepare data to send to the frontend
-    const imagePaths = images.map(image => `/images/${folderName}/${image}`);
-
-    // Render the image viewer page with the data
-    res.render("imageViewer", { folderName, images: imagePaths });
-});// Route to display images for a specific PDF folder
-
-
-// router.get("/gallery/:folderName", (req, res) => {
-//     const folderName = req.params.folderName;
-//     const folderPath = path.join(__dirname, "../public/images", folderName);
-
-//     // Check if the folder exists
-//     if (!fs.existsSync(folderPath)) {
-//         return res.status(404).send("Folder not found.");
-//     }
-
-//     // Get all images in the folder
-//     const images = fs.readdirSync(folderPath).filter(file => file.endsWith('.jpg'));
-
-//     // Prepare data to send to the frontend
-//     const imagePaths = images.map(image => `/images/${folderName}/${image}`);
-
-//     // Render the image viewer page with the data
-//     res.render("imageViewer", { folderName, images: imagePaths });
-// });
-
-// Route to display images for a specific PDF folder
-router.get("/gallery/:folderName", (req, res) => {
-    const folderName = req.params.folderName;
-    const folderPath = path.join(__dirname, "../public/images", folderName);
-
-    // Check if the folder exists
-    if (!fs.existsSync(folderPath)) {
-        return res.status(404).send("Folder not found.");
-    }
-
-    // Get all images in the folder
-    const images = fs.readdirSync(folderPath).filter(file => file.endsWith('.jpg'));
-
-    // Prepare data to send to the frontend
-    const imagePaths = images.map(image => `/images/${folderName}/${image}`);
-
-    // Render the image viewer page with the data
     res.render("imageViewer", { folderName, images: imagePaths });
 });
+
