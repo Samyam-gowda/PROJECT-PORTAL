@@ -3,6 +3,7 @@ const path = require("path");
 
 // Create an Express app
 const app = express();
+app.use(express.static('public'));
 
 // Set the view engine
 app.set("view engine", "ejs");
